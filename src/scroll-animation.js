@@ -36,15 +36,18 @@ export default class ScrollAnimation extends Component {
       elementTop: this.node.getBoundingClientRect().top + ScrollAnimation.posTop()
     }, this.handleScroll);
     this.handleScroll();
+    this.isMounted = true;
   }
 
   componentWillUnmount() {
     if (window && window.addEventListener) {
       window.removeEventListener("scroll", this.listener);
     }
+    this.isMounted = false;
   }
 
   handleScroll() {
+    if (!this.isMounted) return;
     const visible = this.isVisible();
     if (!visible.partially) {
       this.state.timeouts.forEach(function (tid) {
